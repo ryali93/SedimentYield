@@ -1,23 +1,17 @@
-###############################################################
-##########################  FACTOR LS #########################
-###############################################################
-library(raster)
-library(sf)
-###############################################################
+dem        = raster(file.path(IMG, "topo/dem_18s_250.tif"))
+FlowAcc    = raster("D:/TESIS/DATOS/DATA_FACTOR_LS/flow_accum.tif")
 
-shp        <- read_sf("E:/TESIS/datos/shp/Cuenca_tesis_utm.shp")
-utm17      <- "+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
-wgs84      <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-shp_reproj <- st_transform(shp, crs=utm17)
-shp        <- st_as_sf(shp_reproj)
+template   = raster("E:/TESIS/results/k.tif")
 
-template   <- raster("E:/TESIS/results/k.tif")
+# shp        = read_sf("E:/TESIS/datos/shp/Cuenca_tesis_utm.shp")
+# utm17      = "+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0"
+# wgs84      = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+# shp_reproj = st_transform(shp, crs=utm17)
+# shp        = st_as_sf(shp_reproj)
 
-dem        <- raster("D:/TESIS/DATOS/DATA_FACTOR_LS/dem_fill.tif")
-FlowAcc    <- raster("D:/TESIS/DATOS/DATA_FACTOR_LS/flow_accum.tif")
-Slope      <- terrain(dem, 'slope', 'degrees')
-Slope1     <- Slope*0.01745
-Resol      <- res(dem)
+Slope      = terrain(dem, 'slope', 'degrees')
+Slope1     = Slope*0.01745
+Resol      = res(dem)
 
 # Resol: Resolución del DEM (en metros)
 # Slope: Porcentaje de la pendiente (en grados)

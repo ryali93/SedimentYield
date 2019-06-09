@@ -1,22 +1,17 @@
-###############################################################
-##########################  FACTOR K ##########################
-###############################################################
-library(sf)
-library(raster)
-
-shp <- read_sf("E:/TESIS/datos/shp/Cuenca_tesis_utm.shp")
-wgs84 <- "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
-shp_reproj = st_transform(shp, crs=wgs84)
-template = raster("E:/TESIS/results/k.tif")
-
-Sand <- raster("E:/TESIS/datos/img/soil/sand_250.tif")
-Clay <- raster("E:/TESIS/datos/img/soil/clay_250.tif")
-Silt <- raster("E:/TESIS/datos/img/soil/silt_250.tif")
-Orgc <- raster("E:/TESIS/datos/img/soil/orgc_250.tif")
-Estr <- raster("E:/TESIS/datos/img/soil/estr_250.tif")
-Perm <- raster("E:/TESIS/datos/img/soil/perm_250.tif")
-
+Sand = raster(file.path(IMG, "soil/sand_250.tif"))
+Clay = raster(file.path(IMG, "soil/clay_250.tif"))
+Silt = raster(file.path(IMG, "soil/silt_250.tif"))
+Orgc = raster(file.path(IMG, "soil/orgc_250.tif"))
+Estr = raster(file.path(IMG, "soil/estr_250.tif"))
+Perm = raster(file.path(IMG, "soil/perm_250.tif"))
 MO <- Orgc * 0.172
+
+# shp   = read_sf(file.path(SHP, "Cuenca_tesis_utm.shp"))
+# wgs84 = "+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0"
+# shp_reproj = st_transform(shp, crs=wgs84)
+# 
+# template = raster("E:/TESIS/results/k.tif")
+
 
 # Opcion 1: Wischmeier and Smith (1978)
 factorK1 <- function(Sand, Clay, Silt, MO, Estr, Perm) {
@@ -73,9 +68,7 @@ FactorK <- function(pathOutput){
 
   K = raster::mask(Kfactor, st_as_sf(shp_reproj))
   K_resample = Resamplear(K, template)
-  writeRaster(K_resample,
-              paste0(pathOutput, "/", Nfun, ".tif"),
-              overwrite=TRUE)
+  writeRaster(K_resample, paste0(pathOutput, "/", Nfun, ".tif"), overwrite=TRUE)
 }
 
 FactorK("D:/TESIS/DATOS/DATA_FACTOR_K/K1")
@@ -83,6 +76,3 @@ FactorK("D:/TESIS/DATOS/DATA_FACTOR_K/K2")
 FactorK("D:/TESIS/DATOS/DATA_FACTOR_K/K3")
 FactorK("D:/TESIS/DATOS/DATA_FACTOR_K/K4")
 FactorK("D:/TESIS/DATOS/DATA_FACTOR_K/K5")
-
-# Factor_K = stack(list.files("D:/TESIS/DATOS/DATA_FACTOR_K/FACTORC5", 
-#                          full.names =T ))
